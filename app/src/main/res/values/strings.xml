@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">MAXO</string>
+    <string name="app_subtitle">OFFLINE SECURITY TOOL</string>
+    
+    <!-- Setup Screen -->
+    <string name="setup_title">INITIAL STORAGE SETUP</string>
+    <string name="setup_description">Choose a folder where MAXO will store processed files. MAXO will create ONLOCK/ and DPT/ subdirectories inside it.</string>
+    <string name="choose_folder_button">CHOOSE FOLDER</string>
+    <string name="storage_ready_title">Storage Ready</string>
+    <string name="selected_location_label">Selected workspace:</string>
+    <string name="continue_button">CONTINUE</string>
+    <string name="change_folder_button">Change Folder</string>
+    
+    <!-- Home Screen -->
+    <string name="dpt_title">DPT</string>
+    <string name="dpt_card_desc">Process and protect APK files locally using Dalvik shell extraction.</string>
+    <string name="onlock_title">ONLOCK</string>
+    <string name="onlock_card_desc">Analyze and restore APK files through the local ONLOCK engine.</string>
+    <string name="workspace_indicator">Workspace: %1$s</string>
+    <string name="offline_badge">OFFLINE READY</string>
+
+    <!-- Operation Screens -->
+    <string name="dpt_screen_desc">Select an APK file to process locally with the DPT security engine.</string>
+    <string name="onlock_screen_desc">Select an APK file to analyze and process locally with the ONLOCK engine.</string>
+    <string name="select_apk_button">SELECT APK</string>
+    <string name="selected_file_label">Selected File</string>
+    <string name="file_name_label">Name:</string>
+    <string name="file_size_label">Size:</string>
+    <string name="package_name_label">Package:</string>
+    <string name="destination_label">Output Destination:</string>
+    <string name="destination_path_dpt">Selected Folder / DPT /</string>
+    <string name="destination_path_onlock">Selected Folder / ONLOCK /</string>
+    <string name="process_button">PROCESS</string>
+    <string name="processing_title">PROCESSING</string>
+    <string name="process_complete_title">PROCESS COMPLETE</string>
+    <string name="output_saved_to">Output saved to %1$s</string>
+    <string name="open_output_button">SHARE / EXPORT OUTPUT</string>
+    <string name="process_another_button">PROCESS ANOTHER</string>
+    <string name="retry_button">TRY AGAIN</string>
+    
+    <!-- Engine Steps -->
+    <string name="step_preparing">Preparing isolated workspace...</string>
+    <string name="step_extracting">Extracting APK components &amp; DEX headers...</string>
+    <string name="step_processing">Executing engine transformation...</string>
+    <string name="step_verifying">Verifying APK bytecode integrity &amp; manifest...</string>
+    <string name="step_signing">Re-aligning and signing APK container...</string>
+    <string name="step_saving">Saving output to selected folder...</string>
+    <string name="step_cleanup">Cleaning up temporary workspace...</string>
+
+    <!-- Errors -->
+    <string name="error_storage_permission">MAXO cannot access the selected folder.</string>
+    <string name="error_invalid_file">The selected file is not a valid APK.</string>
+    <string name="error_file_too_large">Insufficient storage or processing limits.</string>
+    <string name="error_processing_failed">Processing failed.</string>
+    <string name="error_engine_missing">The local processing engine is unavailable.</string>
+    <string name="error_output_invalid">The processing engine returned an invalid output.</string>
+    <string name="error_permission_revoked">Folder access was revoked. Please select the MAXO folder again.</string>
+</resources>
