@@ -74,7 +74,7 @@ fun EngineProcessingScreen(
         stringResource(R.string.onlock_screen_desc)
     }
 
-    val destinationFolder = if (engineType == ProcessingEngineType.DPT) "DPT/" else "ONLOCK/"
+    val destinationFolder = if (engineType == ProcessingEngineType.DPT) "DPT/" else "UNLOCK/"
 
     Column(
         modifier = Modifier

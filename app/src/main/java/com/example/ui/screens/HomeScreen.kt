@@ -143,13 +143,13 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Section 2: ONLOCK Card
+        // Section 2: UNLOCK Card
         MainEngineCard(
             title = stringResource(R.string.onlock_title),
             description = stringResource(R.string.onlock_card_desc),
             icon = Icons.Default.LockOpen,
-            testTag = "onlock_card",
-            onClick = { onNavigateEngine(ProcessingEngineType.ONLOCK) }
+            testTag = "unlock_card",
+            onClick = { onNavigateEngine(ProcessingEngineType.UNLOCK) }
         )
     }
 }

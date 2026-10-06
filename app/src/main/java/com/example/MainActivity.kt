@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                                 onChangeFolder = { viewModel.checkInitialStorage() }
                             )
                         }
-                        UiStep.DPT_SCREEN, UiStep.ONLOCK_SCREEN -> {
+                        UiStep.DPT_SCREEN, UiStep.UNLOCK_SCREEN -> {
                             EngineProcessingScreen(
                                 engineType = state.activeEngine,
                                 selectedApk = state.selectedApk,

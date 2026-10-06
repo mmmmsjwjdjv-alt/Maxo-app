@@ -4,14 +4,14 @@ import android.net.Uri
 
 enum class ProcessingEngineType {
     DPT,
-    ONLOCK
+    UNLOCK
 }
 
 enum class UiStep {
     STORAGE_SETUP,
     HOME,
     DPT_SCREEN,
-    ONLOCK_SCREEN
+    UNLOCK_SCREEN
 }
 
 sealed interface OperationStatus {

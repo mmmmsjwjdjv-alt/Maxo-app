@@ -53,7 +53,7 @@ class LocalApkProcessor(
             }
 
             log("Input size: ${formatFileSize(inputApkFile.length())}")
-            onProgress(OperationStatus.Processing(15, "Extracting and analyzing Dalvik bytecode...", logs))
+            onProgress(OperationStatus.Processing(15, "Extracting and analyzing Dalvik bytecode & assets...", logs))
 
             // 2. Unpack APK entries into memory/temp structures
             val extractedEntries = mutableMapOf<String, ByteArray>()
@@ -81,30 +81,51 @@ class LocalApkProcessor(
             }
 
             log("Found ${dexFiles.size} DEX file(s): ${dexFiles.joinToString(", ")}")
+
+            // Check for DPT assets in APK
+            val hasDptPayload = extractedEntries.containsKey(DexTransformer.ASSET_DPT_PAYLOAD) ||
+                               extractedEntries.containsKey(DexTransformer.ASSET_DPT_CONFIG)
+            if (hasDptPayload) {
+                log("DPT Shell protection assets detected in input APK.")
+            }
+
             onProgress(OperationStatus.Processing(35, "Executing ${engineType.name} bytecode transformations...", logs))
 
             // 3. Transform DEX files according to engine
-            for (dexName in dexFiles) {
+            var generatedPayloadAsset: ByteArray? = null
+
+            for ((idx, dexName) in dexFiles.withIndex()) {
                 val originalDex = extractedEntries[dexName] ?: continue
-                val transformedDex = when (engineType) {
+                when (engineType) {
                     ProcessingEngineType.DPT -> {
-                        log("Transforming $dexName with DPT Shell engine...")
-                        DexTransformer.transformDexForDpt(originalDex)
+                        log("Protecting $dexName with DPT Shell engine...")
+                        val (transformedDex, payload) = DexTransformer.transformDexForDpt(originalDex, idx + 1)
+                        extractedEntries[dexName] = transformedDex
+                        if (payload != null && generatedPayloadAsset == null) {
+                            generatedPayloadAsset = payload
+                        }
                     }
-                    ProcessingEngineType.ONLOCK -> {
-                        log("Restoring $dexName with ONLOCK engine...")
-                        DexTransformer.transformDexForOnlock(originalDex)
+                    ProcessingEngineType.UNLOCK -> {
+                        log("Unpacking and restoring $dexName with UNLOCK engine...")
+                        val existingPayload = extractedEntries[DexTransformer.ASSET_DPT_PAYLOAD]
+                        val transformedDex = DexTransformer.transformDexForUnlock(originalDex, existingPayload)
+                        extractedEntries[dexName] = transformedDex
                     }
                 }
-                extractedEntries[dexName] = transformedDex
             }
 
             // In DPT mode, inject DPT security shell assets
             if (engineType == ProcessingEngineType.DPT) {
-                log("Injecting DPT security assets & loader rules...")
-                extractedEntries["assets/dpt_rules.bin"] = "DPT_V2.19_OFFLINE_RULES".toByteArray(Charsets.UTF_8)
+                log("Injecting DPT security assets & OoooooOooo payload...")
+                if (generatedPayloadAsset != null) {
+                    extractedEntries[DexTransformer.ASSET_DPT_PAYLOAD] = generatedPayloadAsset
+                }
+                extractedEntries[DexTransformer.ASSET_DPT_CONFIG] = "DPT_V2.19_OFFLINE_RULES".toByteArray(Charsets.UTF_8)
             } else {
-                // In ONLOCK mode, eliminate shell artifacts if present
+                // In UNLOCK mode, eliminate shell artifacts if present
+                log("Stripping DPT shell wrapper assets and markers...")
+                extractedEntries.remove(DexTransformer.ASSET_DPT_PAYLOAD)
+                extractedEntries.remove(DexTransformer.ASSET_DPT_CONFIG)
                 extractedEntries.remove("assets/dpt_rules.bin")
             }
 
@@ -139,12 +160,12 @@ class LocalApkProcessor(
             log("APK re-signed and verified successfully.")
             onProgress(OperationStatus.Processing(90, "Saving to destination folder in SAF storage...", logs))
 
-            // 6. Save to designated directory (DPT or ONLOCK)
+            // 6. Save to designated directory (DPT or UNLOCK)
             val baseName = originalFileName.removeSuffix(".apk")
             val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
             val targetSubDir = when (engineType) {
                 ProcessingEngineType.DPT -> StorageManager.DIR_DPT
-                ProcessingEngineType.ONLOCK -> StorageManager.DIR_ONLOCK
+                ProcessingEngineType.UNLOCK -> StorageManager.DIR_UNLOCK
             }
             val outputFileName = "${baseName}_${engineType.name}_$timestamp.apk"
 

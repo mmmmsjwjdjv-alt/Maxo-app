@@ -15,7 +15,7 @@ class StorageManager(private val context: Context) {
         private const val PREFS_NAME = "maxo_storage_prefs"
         private const val KEY_TREE_URI = "key_storage_tree_uri"
         const val DIR_DPT = "DPT"
-        const val DIR_ONLOCK = "ONLOCK"
+        const val DIR_UNLOCK = "UNLOCK"
     }
 
     fun getStoredTreeUri(): Uri? {
@@ -60,7 +60,7 @@ class StorageManager(private val context: Context) {
 
         try {
             ensureDirectory(documentFile, DIR_DPT)
-            ensureDirectory(documentFile, DIR_ONLOCK)
+            ensureDirectory(documentFile, DIR_UNLOCK)
             return Pair(true, documentFile.name ?: "MAXO Workspace")
         } catch (e: Exception) {
             return Pair(false, "Failed to initialize directories: ${e.message}")

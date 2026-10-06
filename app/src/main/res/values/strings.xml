@@ -4,7 +4,7 @@
     
     <!-- Setup Screen -->
     <string name="setup_title">INITIAL STORAGE SETUP</string>
-    <string name="setup_description">Choose a folder where MAXO will store processed files. MAXO will create ONLOCK/ and DPT/ subdirectories inside it.</string>
+    <string name="setup_description">Choose a folder where MAXO will store processed files. MAXO will create UNLOCK/ and DPT/ subdirectories inside it.</string>
     <string name="choose_folder_button">CHOOSE FOLDER</string>
     <string name="storage_ready_title">Storage Ready</string>
     <string name="selected_location_label">Selected workspace:</string>
@@ -14,14 +14,14 @@
     <!-- Home Screen -->
     <string name="dpt_title">DPT</string>
     <string name="dpt_card_desc">Process and protect APK files locally using Dalvik shell extraction.</string>
-    <string name="onlock_title">ONLOCK</string>
-    <string name="onlock_card_desc">Analyze and restore APK files through the local ONLOCK engine.</string>
+    <string name="onlock_title">UNLOCK</string>
+    <string name="onlock_card_desc">Analyze and restore APK files through the local UNLOCK engine.</string>
     <string name="workspace_indicator">Workspace: %1$s</string>
     <string name="offline_badge">OFFLINE READY</string>
 
     <!-- Operation Screens -->
     <string name="dpt_screen_desc">Select an APK file to process locally with the DPT security engine.</string>
-    <string name="onlock_screen_desc">Select an APK file to analyze and process locally with the ONLOCK engine.</string>
+    <string name="onlock_screen_desc">Select an APK file to analyze and process locally with the UNLOCK engine.</string>
     <string name="select_apk_button">SELECT APK</string>
     <string name="selected_file_label">Selected File</string>
     <string name="file_name_label">Name:</string>
@@ -29,7 +29,7 @@
     <string name="package_name_label">Package:</string>
     <string name="destination_label">Output Destination:</string>
     <string name="destination_path_dpt">Selected Folder / DPT /</string>
-    <string name="destination_path_onlock">Selected Folder / ONLOCK /</string>
+    <string name="destination_path_onlock">Selected Folder / UNLOCK /</string>
     <string name="process_button">PROCESS</string>
     <string name="processing_title">PROCESSING</string>
     <string name="process_complete_title">PROCESS COMPLETE</string>

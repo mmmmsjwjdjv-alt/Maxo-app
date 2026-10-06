@@ -89,7 +89,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.update {
             it.copy(
                 activeEngine = engine,
-                currentStep = if (engine == ProcessingEngineType.DPT) UiStep.DPT_SCREEN else UiStep.ONLOCK_SCREEN,
+                currentStep = if (engine == ProcessingEngineType.DPT) UiStep.DPT_SCREEN else UiStep.UNLOCK_SCREEN,
                 selectedApk = null,
                 operationStatus = OperationStatus.Idle,
                 errorMessage = null
