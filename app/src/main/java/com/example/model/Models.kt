@@ -9,6 +9,7 @@ enum class ProcessingEngineType {
 
 enum class UiStep {
     STORAGE_SETUP,
+    ENGINE_INSTALL,
     HOME,
     DPT_SCREEN,
     UNLOCK_SCREEN

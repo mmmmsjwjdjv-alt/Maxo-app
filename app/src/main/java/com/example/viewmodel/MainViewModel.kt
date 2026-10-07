@@ -4,6 +4,8 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.engine.EngineInstallStatus
+import com.example.engine.EnginePackageManager
 import com.example.model.*
 import com.example.processor.LocalApkProcessor
 import com.example.storage.StorageManager
@@ -18,6 +20,7 @@ data class MainUiState(
     val currentStep: UiStep = UiStep.STORAGE_SETUP,
     val storageReady: Boolean = false,
     val workspaceDisplayPath: String = "",
+    val engineInstallStatus: EngineInstallStatus = EngineInstallStatus.NotInstalled,
     val activeEngine: ProcessingEngineType = ProcessingEngineType.DPT,
     val selectedApk: SelectedApkInfo? = null,
     val operationStatus: OperationStatus = OperationStatus.Idle,
@@ -27,6 +30,7 @@ data class MainUiState(
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val storageManager = StorageManager(application)
+    val engineManager = EnginePackageManager(application)
     private val localProcessor = LocalApkProcessor(application, storageManager)
 
     private val _uiState = MutableStateFlow(MainUiState())
@@ -34,16 +38,33 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         checkInitialStorage()
+        observeEngineStatus()
+    }
+
+    private fun observeEngineStatus() {
+        viewModelScope.launch {
+            engineManager.status.collect { status ->
+                _uiState.update { it.copy(engineInstallStatus = status) }
+            }
+        }
     }
 
     fun checkInitialStorage() {
         val isReady = storageManager.isStorageInitialized()
         val displayPath = storageManager.getDisplayPath()
+        val engineReady = engineManager.isEngineInstalled()
+
+        val nextStep = when {
+            !isReady -> UiStep.STORAGE_SETUP
+            !engineReady -> UiStep.ENGINE_INSTALL
+            else -> UiStep.HOME
+        }
+
         _uiState.update {
             it.copy(
                 storageReady = isReady,
                 workspaceDisplayPath = displayPath,
-                currentStep = if (isReady) UiStep.HOME else UiStep.STORAGE_SETUP
+                currentStep = nextStep
             )
         }
     }
@@ -81,6 +102,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun confirmStorageSetup() {
         if (_uiState.value.storageReady) {
+            val engineReady = engineManager.isEngineInstalled()
+            _uiState.update {
+                it.copy(currentStep = if (engineReady) UiStep.HOME else UiStep.ENGINE_INSTALL)
+            }
+        }
+    }
+
+    fun startEngineInstallation() {
+        viewModelScope.launch {
+            engineManager.installEnginePackages()
+        }
+    }
+
+    fun confirmEngineInstallation() {
+        if (engineManager.isEngineInstalled()) {
             _uiState.update { it.copy(currentStep = UiStep.HOME) }
         }
     }

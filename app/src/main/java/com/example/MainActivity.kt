@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.model.UiStep
 import com.example.ui.components.SubtleMonochromeParticles
+import com.example.ui.screens.EngineInstallScreen
 import com.example.ui.screens.EngineProcessingScreen
 import com.example.ui.screens.HomeScreen
 import com.example.ui.screens.StorageSetupScreen
@@ -49,6 +50,13 @@ class MainActivity : ComponentActivity() {
                                 errorMessage = state.errorMessage,
                                 onFolderSelected = { uri -> viewModel.onFolderSelected(uri) },
                                 onContinue = { viewModel.confirmStorageSetup() }
+                            )
+                        }
+                        UiStep.ENGINE_INSTALL -> {
+                            EngineInstallScreen(
+                                status = state.engineInstallStatus,
+                                onStartInstall = { viewModel.startEngineInstallation() },
+                                onContinue = { viewModel.confirmEngineInstallation() }
                             )
                         }
                         UiStep.HOME -> {
